@@ -1,0 +1,20 @@
+apiVersion:apps/v1
+kind: Deployment
+metadat:
+  name:patient-service
+  labels:
+    app: patient-service
+  spec:
+    replicas: 2
+    selector:
+      matchLables:
+        app: patient-service
+      spec:
+        containers:
+          -name: patient-service
+          image: gcr.io/HCL_HACKATHON/patient-service:latest
+          ports: 
+            -ContainerPort: 3030
+            env:
+              - name: NODE_ENV
+               value: "Dev"
