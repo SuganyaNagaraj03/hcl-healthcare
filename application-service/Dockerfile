@@ -1,7 +1,6 @@
 FROM node:18-alpine  
 WORKDIR /app  
-COPY patient-service/package*.json ./
-RUN npm ci
-COPY patient-service/ ./
+#RUN npm ci
+COPY . ./
 EXPOSE 3030
 CMD ["node","start"]
