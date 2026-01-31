@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-service
+spec: 
+ replicas: {{ .Values.replicaCOunt }}
+ selector:
+   matchLabels:
+     app: application-service
+  template:
+    metadata:
+     labels:
+      app: application-service
+    spec: 
+     containers:
+      -name: application-service
+       image: " {{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      ports: 
+      - containerPort: 8080
