@@ -1,0 +1,39 @@
+name: Patient Service CI/CD
+on:
+  push:
+    paths: 
+      - "patient-service/**"
+    branches: [main]
+env:
+  PROJECT_ID: my_gcp_project
+  REGION: us-central1
+  SERVICE_NAME: patient-service
+  
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY}}
+      - name: Configure Docker
+       run: gcloud auth configure-docker $REGION-docker.pkg
+       run: docker build -t $REGION-docker.pkg/$PROJECT_ID/$REPOSITORY/$SERVICE_NAME:${{ github.sha }} patient-service
+      - name: Push docker IMG
+      run: docker push $REGION-docker.pkg/$PROJECT_ID/$REPOSITORY/$SERVICE_NAME:${{ github.sha }} 
+      - name: GKE cluster
+      uses: google-github-actions/get-gke-credentials@v2
+        with:
+           cluster_name: gke_dev
+           location: ${{env.REGION}}
+        - name: Deploy using helm
+          run: 
+            helm upgrade --install patient-service helm/patient-service --namespace dev --create-namespace -set \
+              image.repository=$REGION-docker.pkg/$PROJECT_ID/$REPOSITORY/$SERVICE_NAME --set image.tag=${{ github.sha }}
+      
+      
+      
+      
+  
