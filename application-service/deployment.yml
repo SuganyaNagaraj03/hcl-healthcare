@@ -1,0 +1,20 @@
+apiVersion:apps/v1
+kind: Deployment
+metadat:
+  name:application-service
+  labels:
+    app: application-service
+  spec:
+    replicas: 2
+    selector:
+      matchLables:
+        app: application-service
+      spec:
+        containers:
+          -name: application-service
+          image: gcr.io/HCL_HACKATHON/application-service:latest
+          ports: 
+            -ContainerPort: 3030
+            env:
+              - name: NODE_ENV
+               value: "Dev"
