@@ -1,0 +1,6 @@
+replicaCount: 1
+image:
+ repository: gcr.io/PROJECT_ID/application_service
+ tag: latest
+ service:
+  port: 8080
