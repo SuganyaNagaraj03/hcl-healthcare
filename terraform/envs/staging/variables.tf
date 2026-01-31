@@ -29,5 +29,5 @@ variable "subnet_cidr" {
 }
 variable "zones" {
   description = "GCPzones"
-  type =lsit(string)
+  type =list(string)
 }
